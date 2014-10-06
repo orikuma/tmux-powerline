@@ -4,7 +4,7 @@
 # Source lib to get the function get_tmux_pwd
 source "${TMUX_POWERLINE_DIR_LIB}/tmux_adapter.sh"
 
-mod_symbol="﹢"
+mod_symbol="+"
 
 run_segment() {
 	tmux_path=$(get_tmux_cwd)
@@ -49,11 +49,11 @@ __parse_svn_stats() {
 		return
 	fi
 
-	local svn_info=$(svn info 2>/dev/null)
+	local svn_info=$(LANG=C && svn info 2>/dev/null)
 	if [ -z "${svn_info}" ]; then
 		return
 	fi
-
+   
 	local svn_wcroot=$(echo "${svn_info}" | sed -ne 's#^Working Copy Root Path: ##p')
 	local svn_st=$(cd "${svn_wcroot}"; svn st)
 	local modified=$(echo "${svn_st}" | egrep '^M' | wc -l)
@@ -61,10 +61,11 @@ __parse_svn_stats() {
 
 	#print
 	if [[ $modified -gt 0 ]] ; then
-		local ret="#[fg=colour${TMUX_POWERLINE_CUR_SEGMENT_FG}]±${modified}"
+		# local ret="#[fg=colour${TMUX_POWERLINE_CUR_SEGMENT_FG}]±${modified}"
+        local ret="${modified}"
 	fi
-	if [[ $conflicted -gt 0 ]] ; then
-		local ret="#[fg=colour${svn_colour}]ϟ${conflicted} ${ret}"
-	fi
+	# if [[ $conflicted -gt 0 ]] ; then
+	# 	local ret="#[fg=colour${svn_colour}]ϟ${conflicted} ${ret}"
+	# fi
 	echo "${ret}"
 }

@@ -61,7 +61,7 @@ __parse_svn_branch() {
 		return
 	fi
 
-	local svn_info=$(svn info 2>/dev/null)
+	local svn_info=$(LANG=C && svn info 2>/dev/null)
 	if [ -z "${svn_info}" ]; then
 		return
 	fi
